@@ -1,0 +1,80 @@
+{% extends "user_management/base.html" %}
+
+{% block content %}
+
+{% if context.message %}
+<script>
+  alert("{{ context.message }}");
+</script>
+{% endif %}
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="display:fixed;">
+  <a class="navbar-brand" href="{% url 'user_management:dashboard' %}">Society</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'user_management:dashboard' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      {% if context.is_committee_member and context.is_committee_member == 1 %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_management:record_maintenance' %}">Record Maintenance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_management:paid_maintenance' %}">Paid Maintenance</a>
+      </li>
+      {% endif %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Settings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'user_management:my_profile' %}">My Profile</a>
+<!--          <div class="dropdown-divider"></div>-->
+          <a class="dropdown-item" href="{% url 'user_management:logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<br>
+<div id="{{ article.id }}">
+<div class="col-md-2"></div>
+<div class="container col-md-8">
+  <div class="card">
+    <div class="card-body">
+    <div class="row">
+      <div class="col-md-3"> <img class="img-rounded" style="height:100px; width: 100px;" src="{{ context.user.image }}" alt="No Image"> </div>
+      <div class="col-md-9"> <h3 class="text-center">{{ context.user.fname }} {{ context.user.lname }}</h3> </div>
+    </div>
+    <hr>
+    <div class="row">
+      <h1 class="text-center">Email: {{ context.user.email }}</h1>
+    </div>
+    <div class="row">
+      <h1 class="text-center">Phone: {{ context.user.phone }}</h1>
+    </div>
+    <div class="text-center">
+      <a href="{% url 'user_management:logout' %}" class="text-center btn btn-primary">Logout</a>
+    </div>
+</div>
+</div>
+</div>
+<div class="col-md-2"></div>
+</div>
+<br>
+
+<script>
+  $( document ).ready(function() {
+    console.log( "ready!" );
+    $('title').html('Profile');
+  });
+</script>
+
+{% endblock %}

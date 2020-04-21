@@ -1,0 +1,6 @@
+[client]
+database = 'user_management'
+user = 'manish'
+host = '127.0.0.1'
+password = 'Manish@123'
+;default-character-set = utf-8

@@ -1,0 +1,134 @@
+{% extends "user_management/base.html" %}
+
+{% block content %}
+
+{% if context.message %}
+<script>
+  alert("{{ context.message }}");
+</script>
+{% endif %}
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="display:fixed;">
+  <a class="navbar-brand" href="{% url 'user_management:dashboard' %}">Society</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'user_management:dashboard' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      {% if context.is_committee_member and context.is_committee_member == 1 %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_management:record_maintenance' %}">Record Maintenance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_management:paid_maintenance' %}">Paid Maintenance</a>
+      </li>
+      {% endif %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Settings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'user_management:my_profile' %}">My Profile</a>
+<!--          <div class="dropdown-divider"></div>-->
+          <a class="dropdown-item" href="{% url 'user_management:logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+{%if context.is_committee_member and context.is_committee_member == 1 %}
+<br>
+<div>
+<!--<div class="col-md-2"></div>-->
+<div class="container col-md-12">
+  <div class="card">
+    <div class="card-body">
+    <div class="row">
+      <div class="col-md-12"> <h3 class="text-center">Society Users</h3> </div>
+    </div>
+    <div class="row">
+      <table class="table table-stripped">
+        <thead>
+        <tr>
+          <td>User ID</td>
+          <td>Name</td>
+          <td>Email</td>
+          <td>Phone</td>
+          <td>Is Committee Member</td>
+          <td>Action</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in context.users %}
+        <tr>
+          <td>{{ user.user_id }}</td>
+          <td>{{ user.fname }} {{ user.lname }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone }}</td>
+          <td>{% if user.is_committee_member == 1 %} Yes {% else %} No {% endif %}</td>
+          <td>{% if user.is_approved == 0 %}<a href="{% url 'user_management:approve' %}?id={{ user.user_id }}" class="btn btn-primary">Approve</a><br><a href="{% url 'user_management:approve_member' %}?id={{ user.user_id }}" class="btn btn-success">Approve as Member</a> {% else %}<a href="{% url 'user_management:reject' %}?id={{ user.user_id }}" class="btn btn-danger">Reject</a>{% endif %}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+</div>
+<!--<div class="col-md-2"></div>-->
+</div>
+<br>
+
+{% else %}
+
+<br>
+<div>
+<div class="col-md-2"></div>
+<div class="container col-md-8">
+  <div class="card">
+    <div class="card-body">
+    <div class="row">
+      <div class="col-md-12"> <h3 class="text-center">Maintenance Paid</h3> </div>
+    </div>
+    <div class="row">
+      <table class="table table-stripped">
+        <thead>
+        <tr>
+          <td><b>Amount</b></td>
+          <td><b>Date</b></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for maintenance in context.maintenance_list %}
+        <tr>
+          <td>{{ maintenance.amount }}</td>
+          <td>{{ maintenance.date }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+</div>
+<div class="col-md-2"></div>
+</div>
+<br>
+
+{% endif %}
+
+<script>
+  $( document ).ready(function() {
+    console.log( "ready!" );
+    $('title').html('Dashboard');
+  });
+</script>
+
+{% endblock %}

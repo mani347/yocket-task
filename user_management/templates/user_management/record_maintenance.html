@@ -1,0 +1,82 @@
+{% extends "user_management/base.html" %}
+
+{% block content %}
+
+{% if context.message %}
+<script>
+  alert("{{ context.message }}");
+</script>
+{% endif %}
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="display:fixed;">
+  <a class="navbar-brand" href="{% url 'user_management:dashboard' %}">Society</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'user_management:dashboard' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      {% if context.is_committee_member and context.is_committee_member == 1 %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_management:record_maintenance' %}">Record Maintenance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_management:paid_maintenance' %}">Paid Maintenance</a>
+      </li>
+      {% endif %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Settings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'user_management:my_profile' %}">My Profile</a>
+<!--          <div class="dropdown-divider"></div>-->
+          <a class="dropdown-item" href="{% url 'user_management:logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<br>
+<div id="{{ article.id }}">
+<div class="col-md-3"></div>
+<div class="container col-md-6">
+  <div class="card">
+    <div class="card-body">
+    <h1 class="text-center">Maintenance Details</h1>
+    <form action="" method="post">
+      {% csrf_token %}
+    <div class="form-group">
+      <input type="email" name="email" id="email" class="form-control" placeholder="Members's Email">
+    </div>
+    <div class="form-group">
+      <input type="number" name="phone" id="phone" class="form-control" maxlength="10" placeholder="Members's Mobile">
+    </div>
+    <div class="form-group">
+      <input type="number" name="amount" id="amount" class="form-control" placeholder="Members's Maintenance Amount" required>
+    </div>
+    <div class="form-group">
+      <input type="submit" class="btn btn-primary form-control">
+    </div>
+    </form>
+    </div>
+  </div>
+</div>
+<div class="col-md-3"></div>
+</div>
+<br>
+
+<script>
+  $( document ).ready(function() {
+    console.log( "ready!" );
+    $('title').html('Maintenance');
+  });
+</script>
+
+{% endblock %}
